@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Trip Adriatique 2026 - Miara Voyages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sand: #F4EFE6;
+            --terracotta: #D4755E;
+            --deep-blue: #1B3A52;
+            --ocean: #4A8BA5;
+            --cream: #FFF9F0;
+            --charcoal: #2B2D2F;
+            --olive: #7A8450;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); line-height: 1.6; }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--ocean) 100%);
+            color: white;
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .back-link:hover { opacity: 0.8; }
+        .header-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-style: italic;
+        }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--ocean) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .hero-content { max-width: 800px; margin: 0 auto; }
+        .hero h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        .hero-subtitle {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        .hero-dates {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 600;
+            font-family: 'Fraunces', serif;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        
+        /* Container */
+        .container { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+        .section-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2.5rem;
+            font-style: italic;
+            color: var(--deep-blue);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            text-align: center;
+            opacity: 0.7;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Timeline */
+        .timeline { position: relative; padding: 2rem 0; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--ocean), var(--terracotta));
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+        .timeline-item:nth-child(odd) { flex-direction: row; }
+        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+        .timeline-content {
+            width: 45%;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--terracotta);
+            border-radius: 50%;
+            border: 4px solid var(--cream);
+            z-index: 10;
+        }
+        .timeline-dot.highlight {
+            width: 30px;
+            height: 30px;
+            background: var(--deep-blue);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .day-number {
+            font-family: 'Fraunces', serif;
+            font-size: 0.9rem;
+            color: var(--ocean);
+            font-weight: 600;
+        }
+        .day-date {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+        .destination-name {
+            font-family: 'Fraunces', serif;
+            font-size: 1.8rem;
+            color: var(--deep-blue);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .country-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .italy { background: #E8F5E9; color: #2E7D32; }
+        .croatia { background: #E3F2FD; color: #1565C0; }
+        .slovenia { background: #FFF3E0; color: #E65100; }
+        .destination-desc {
+            opacity: 0.7;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .hotel-info {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--sand);
+        }
+        .hotel-name {
+            font-weight: 600;
+            color: var(--deep-blue);
+            margin-bottom: 0.3rem;
+        }
+        .booking-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: var(--ocean);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .booking-link:hover { text-decoration: underline; }
+        
+        /* Footer */
+        footer {
+            background: var(--deep-blue);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 6rem;
+        }
+        footer p { opacity: 0.8; margin-bottom: 0.5rem; }
+        
+        @media (max-width: 768px) {
+            .timeline::before { left: 20px; }
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start;
+                padding-left: 50px;
+            }
+            .timeline-content { width: 100%; }
+            .timeline-dot {
+                left: 20px;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-link">← Retour</a>
+            <h2 class="header-title">Road Trip Adriatique 2026</h2>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Road Trip Adriatique</h1>
+            <p class="hero-subtitle">Italie · Croatie · Slovénie</p>
+            <p class="hero-dates">29 juillet - 23 août 2026</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">26</span>
+                    <span class="stat-label">Jours</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">2380</span>
+                    <span class="stat-label">Kilomètres</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">13</span>
+                    <span class="stat-label">Étapes</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">Notre Itinéraire Jour par Jour</h2>
+        <p class="section-subtitle">Cliquez sur une étape pour voir tous les détails</p>
+        
+        <div class="timeline">
+            <!-- TURIN -->
+            <div class="timeline-item">
+                <div class="timeline-dot highlight"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 1-2</span>
+                        <span class="day-date">29-30 juillet</span>
+                    </div>
+                    <h3 class="destination-name">🏛️ Turin</h3>
+                    <span class="country-badge italy">Italie</span>
+                    <p class="destination-desc">Capitale baroque du Piémont. La belle inconnue au charme discret. Turin, moins ostentatoire que ses voisines, adopte un urbanisme évoquant Paris.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">NH Collection Torino Piazza Carlina</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Palazzo XVIIe siècle • 4★</div>
+                        <a href="https://www.booking.com/hotel/it/nh-collection-piazza-carlina.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Trip Adriatique 2026 - Miara Voyages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sand: #F4EFE6;
+            --terracotta: #D4755E;
+            --deep-blue: #1B3A52;
+            --ocean: #4A8BA5;
+            --cream: #FFF9F0;
+            --charcoal: #2B2D2F;
+            --olive: #7A8450;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); line-height: 1.6; }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--ocean) 100%);
+            color: white;
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .back-link:hover { opacity: 0.8; }
+        .header-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-style: italic;
+        }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--ocean) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .hero-content { max-width: 800px; margin: 0 auto; }
+        .hero h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        .hero-subtitle {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        .hero-dates {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 600;
+            font-family: 'Fraunces', serif;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        
+        /* Container */
+        .container { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+        .section-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2.5rem;
+            font-style: italic;
+            color: var(--deep-blue);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            text-align: center;
+            opacity: 0.7;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Timeline */
+        .timeline { position: relative; padding: 2rem 0; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--ocean), var(--terracotta));
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+        .timeline-item:nth-child(odd) { flex-direction: row; }
+        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+        .timeline-content {
+            width: 45%;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--terracotta);
+            border-radius: 50%;
+            border: 4px solid var(--cream);
+            z-index: 10;
+        }
+        .timeline-dot.highlight {
+            width: 30px;
+            height: 30px;
+            background: var(--deep-blue);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .day-number {
+            font-family: 'Fraunces', serif;
+            font-size: 0.9rem;
+            color: var(--ocean);
+            font-weight: 600;
+        }
+        .day-date {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+        .destination-name {
+            font-family: 'Fraunces', serif;
+            font-size: 1.8rem;
+            color: var(--deep-blue);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .country-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .italy { background: #E8F5E9; color: #2E7D32; }
+        .croatia { background: #E3F2FD; color: #1565C0; }
+        .slovenia { background: #FFF3E0; color: #E65100; }
+        .destination-desc {
+            opacity: 0.7;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .hotel-info {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--sand);
+        }
+        .hotel-name {
+            font-weight: 600;
+            color: var(--deep-blue);
+            margin-bottom: 0.3rem;
+        }
+        .booking-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: var(--ocean);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .booking-link:hover { text-decoration: underline; }
+        
+        /* Footer */
+        footer {
+            background: var(--deep-blue);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 6rem;
+        }
+        footer p { opacity: 0.8; margin-bottom: 0.5rem; }
+        
+        @media (max-width: 768px) {
+            .timeline::before { left: 20px; }
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start;
+                padding-left: 50px;
+            }
+            .timeline-content { width: 100%; }
+            .timeline-dot {
+                left: 20px;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-link">← Retour</a>
+            <h2 class="header-title">Road Trip Adriatique 2026</h2>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Road Trip Adriatique</h1>
+            <p class="hero-subtitle">Italie · Croatie · Slovénie</p>
+            <p class="hero-dates">29 juillet - 23 août 2026</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">26</span>
+                    <span class="stat-label">Jours</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">2380</span>
+                    <span class="stat-label">Kilomètres</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">13</span>
+                    <span class="stat-label">Étapes</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">Notre Itinéraire Jour par Jour</h2>
+        <p class="section-subtitle">Cliquez sur une étape pour voir tous les détails</p>
+        
+        <div class="timeline">
+            <!-- TURIN -->
+            <div class="timeline-item">
+                <div class="timeline-dot highlight"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 1-2</span>
+                        <span class="day-date">29-30 juillet</span>
+                    </div>
+                    <h3 class="destination-name">🏛️ Turin</h3>
+                    <span class="country-badge italy">Italie</span>
+                    <p class="destination-desc">Capitale baroque du Piémont. La belle inconnue au charme discret. Turin, moins ostentatoire que ses voisines, adopte un urbanisme évoquant Paris.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">NH Collection Torino Piazza Carlina</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Palazzo XVIIe siècle • 4★</div>
+                        <a href="https://www.booking.com/hotel/it/nh-collection-piazza-carlina.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOLOGNE -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 3-4</span>
+                        <span class="day-date">31 juillet - 1er août</span>
+                    </div>
+                    <h3 class="destination-name">🍝 Bologne</h3>
+                    <span class="country-badge italy">Italie</span>
+                    <p class="destination-desc">La Rossa, la Dotta, la Grassa. Capitale gastronomique et universitaire. Ville riche affublée du surnom de la Dotta pour son université, la doyenne du monde occidental.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Hôtel Centre Historique</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Charme médiéval • 4★</div>
+                        <a href="https://www.booking.com/city/it/bologna.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIROLO -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 5-7</span>
+                        <span class="day-date">2-4 août</span>
+                    </div>
+                    <h3 class="destination-name">🏖️ Sirolo</h3>
+                    <span class="country-badge italy">Italie</span>
+                    <p class="destination-desc">Perle de la Riviera del Conero. Village médiéval surplombant l'Adriatique avec enchevêtrement de ruelles animées, porches en pierre fleuris, plages sauvages.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Hotel Monteconero</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Ancienne abbaye XIIe • Vue mer • 4★</div>
+                        <a href="https://www.booking.com/hotel/it/monteconero.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FERRY -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jour 8</span>
+                        <span class="day-date">5 août</span>
+                    </div>
+                    <h3 class="destination-name">⛴️ Ferry Ancône-Split</h3>
+                    <span class="country-badge italy">Traversée</span>
+                    <p class="destination-desc">Traversée de l'Adriatique. De l'Italie vers la Croatie. Route pour Ancône où l'on embarque (avec la voiture) à bord du ferry pour Split. Traversée de nuit, arrivée le lendemain matin.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Cabine Ferry</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Nuit à bord</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BIOGRAD -->
+            <div class="timeline-item">
+                <div class="timeline-dot highlight"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 9-11</span>
+                        <span class="day-date">6-8 août</span>
+                    </div>
+                    <h3 class="destination-name">⛵ Biograd na Moru</h3>
+                    <span class="country-badge croatia">Croatie</span>
+                    <p class="destination-desc">Porte de l'archipel des Kornati. Eaux limpides de la Dalmatie. Petit port animé tourné vers la plaisance. Point de départ pour l'archipel des Kornati.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Appartement Familial Marina</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Vue mer • Design minimaliste</div>
+                        <a href="https://www.booking.com/city/hr/biograd-na-moru.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PLITVICE -->
+            <div class="timeline-item">
+                <div class="timeline-dot highlight"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 12-13</span>
+                        <span class="day-date">9-10 août</span>
+                    </div>
+                    <h3 class="destination-name">💧 Lacs de Plitvice</h3>
+                    <span class="country-badge croatia">Croatie</span>
+                    <p class="destination-desc">Parc national UNESCO. Merveille naturelle en cascade. 16 lacs en terrasses reliés par 92 cascades spectaculaires. Eaux turquoise, forêts anciennes.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Hotel près Entrée 1</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Parc National • 3★</div>
+                        <a href="https://www.booking.com/city/hr/plitvicka-jezera.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PIVKA -->
+            <div class="timeline-item">
+                <div class="timeline-dot highlight"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jour 14</span>
+                        <span class="day-date">11 août</span>
+                    </div>
+                    <h3 class="destination-name">🦇 Pivka</h3>
+                    <span class="country-badge slovenia">Slovénie</span>
+                    <p class="destination-desc">Grottes de Postojna et rencontre avec les ours bruns. Région karstique extraordinaire abritant les grottes de Postojna (24km) et le château de Predjama construit dans une falaise.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Maison d'Hôtes Forêt Sneznik</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Charme Nature</div>
+                        <a href="https://www.booking.com/city/si/postojna.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LJUBLJANA -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 15-16</span>
+                        <span class="day-date">12-13 août</span>
+                    </div>
+                    <h3 class="destination-name">🐉 Ljubljana</h3>
+                    <span class="country-badge slovenia">Slovénie</span>
+                    <p class="destination-desc">Capitale verte et baroque. À la croisée des Balkans et de l'Europe centrale. Architecture de Jože Plecnik, marché animé, cafés bordant la Ljubljanica.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Appartement Moderne</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Design Contemporain • Piscine rooftop</div>
+                        <a href="https://www.booking.com/city/si/ljubljana.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLED -->
+            <div class="timeline-item">
+                <div class="timeline-dot highlight"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 17-19</span>
+                        <span class="day-date">14-16 août</span>
+                    </div>
+                    <h3 class="destination-name">🏰 Lac de Bled</h3>
+                    <span class="country-badge slovenia">Slovénie</span>
+                    <p class="destination-desc">Lac alpin de conte de fées. Île, église, château et montagnes. L'église baroque qui semble flotter délicatement sur l'eau crée un tableau singulier.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Chalet Traditionnel Parc Triglav</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Charme Montagne • Sauna</div>
+                        <a href="https://www.booking.com/city/si/bled.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOVEC -->
+            <div class="timeline-item">
+                <div class="timeline-dot highlight"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 20-21</span>
+                        <span class="day-date">17-18 août</span>
+                    </div>
+                    <h3 class="destination-name">🚣 Bovec</h3>
+                    <span class="country-badge slovenia">Slovénie</span>
+                    <p class="destination-desc">Capitale des sports d'aventure. Rivière Soča émeraude. Coin des Alpes ignoré de beaucoup ! Passionnés d'activités en plein air et sports aquatiques seront comblés.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Chalet Contemporain</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Design Alpin • Sauna</div>
+                        <a href="https://www.booking.com/city/si/bovec.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UDINE -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jours 22-23</span>
+                        <span class="day-date">19-20 août</span>
+                    </div>
+                    <h3 class="destination-name">🎨 Udine</h3>
+                    <span class="country-badge italy">Italie</span>
+                    <p class="destination-desc">Charme vénitien du Frioul. Entre Alpes et Adriatique, Udine dévoile un patrimoine riche composé de strates romaines, lombardes et vénitiennes.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Castello Buttrio</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Château XIIe • Vignobles • 5★</div>
+                        <a href="https://www.booking.com/city/it/udine.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BERGAME -->
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jour 24</span>
+                        <span class="day-date">21 août</span>
+                    </div>
+                    <h3 class="destination-name">🏔️ Bergame</h3>
+                    <span class="country-badge italy">Italie</span>
+                    <p class="destination-desc">Joyau médiéval de Lombardie. Città Alta perchée. Ville double : médiévale perchée avec remparts vénitiens UNESCO, moderne en bas. Patrimoine exceptionnel.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Maison-Tour XIIIe</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Monument Historique • Design</div>
+                        <a href="https://www.booking.com/city/it/bergamo.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AOSTE -->
+            <div class="timeline-item">
+                <div class="timeline-dot highlight"></div>
+                <div class="timeline-content">
+                    <div class="day-header">
+                        <span class="day-number">Jour 25</span>
+                        <span class="day-date">22 août</span>
+                    </div>
+                    <h3 class="destination-name">⛰️ Aoste</h3>
+                    <span class="country-badge italy">Italie</span>
+                    <p class="destination-desc">Rome des Alpes. Patrimoine romain exceptionnel : arc d'Auguste, théâtre antique, forum. Au croisement de la Suisse, France et Italie. Porte d'accès aux plus hauts sommets d'Europe.</p>
+                    <div class="hotel-info">
+                        <div class="hotel-name">Hôtel Design Centre</div>
+                        <div style="font-size: 0.85rem; opacity: 0.7;">Design années 50-60 • 4★</div>
+                        <a href="https://www.booking.com/city/it/aosta.fr.html" target="_blank" class="booking-link">Voir sur Booking.com →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Road Trip Adriatique · 29 juillet - 23 août 2026</p>
+        <p style="opacity: 0.6;">2380 km d'Aventures · Italie, Croatie & Slovénie 🚗</p>
+    </footer>
+
+    <script>
+        // Animation au scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const items = document.querySelectorAll('.timeline-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(30px)';
+                item.style.transition = `all 0.6s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
+```
