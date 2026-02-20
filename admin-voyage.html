@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer/Modifier un Voyage | Miara Voyages Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --noir: #1A1A1A;
+            --or-rose: #B76E79;
+            --gris-perle: #F8F8F8;
+            --blanc: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gris-perle);
+            color: var(--noir);
+        }
+
+        /* Header */
+        .header {
+            background: var(--noir);
+            color: var(--blanc);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .back-link {
+            color: var(--or-rose);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        /* Main */
+        .main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Form */
+        .form-section {
+            background: var(--blanc);
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--or-rose);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--noir);
+            font-size: 0.9rem;
+        }
+
+        label .required {
+            color: #c33;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            background: var(--gris-perle);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--or-rose);
+            background: var(--blanc);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        /* Photo Upload */
+        .photo-upload {
+            border: 2px dashed #ddd;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--gris-perle);
+        }
+
+        .photo-upload:hover {
+            border-color: var(--or-rose);
+            background: var(--blanc);
+        }
+
+        .photo-upload input[type="file"] {
+            display: none;
+        }
+
+        .photo-preview {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .photo-preview.show {
+            display: block;
+        }
+
+        /* Etapes Section */
+        .etapes-list {
+            margin-top: 2rem;
+        }
+
+        .etape-item {
+            background: var(--gris-perle);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .etape-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .etape-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--or-rose);
+        }
+
+        .btn-remove-etape {
+            background: transparent;
+            border: 1px solid #c33;
+            color: #c33;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-remove-etape:hover {
+            background: #c33;
+            color: var(--blanc);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--or-rose);
+            color: var(--blanc);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary:hover {
+            background: #a65d68;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(183, 110, 121, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--or-rose);
+            color: var(--or-rose);
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-secondary:hover {
+            background: var(--or-rose);
+            color: var(--blanc);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 3rem;
+        }
+
+        /* CSV Import */
+        .csv-import {
+            background: rgba(183, 110, 121, 0.05);
+            border: 2px dashed var(--or-rose);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .csv-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .csv-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .file-input-label {
+            background: var(--noir);
+            color: var(--blanc);
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .file-input-label:hover {
+            background: #333;
+        }
+
+        .csv-filename {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="admin-dashboard.html" class="back-link">← Retour au dashboard</a>
+        <div class="logo">MIARA Admin</div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+        <h1 class="page-title" id="pageTitle">Créer un voyage</h1>
+
+        <div id="successMessage" class="success-message">
+            ✓ Voyage sauvegardé avec succès !
+        </div>
+
+        <form id="voyageForm">
+            <!-- Informations générales -->
+            <section class="form-section">
+                <h2 class="section-title">Informations générales</h2>
+                
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="titre">Titre du voyage <span class="required">*</span></label>
+                        <input type="text" id="titre" name="titre" placeholder="Ex: Road Trip Adriatique" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateDebut">Date de début <span class="required">*</span></label>
+                        <input type="date" id="dateDebut" name="dateDebut" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateFin">Date de fin <span class="required">*</span></label>
+                        <input type="date" id="dateFin" name="dateFin" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="pays">Pays (emojis drapeaux)</label>
+                        <input type="text" id="pays" name="pays" placeholder="Ex: 🇮🇹 🇭🇷 🇸🇮">
+                        <p class="hint">Utilisez des emojis de drapeaux séparés par des espaces</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="distance">Distance (km)</label>
+                        <input type="number" id="distance" name="distance" placeholder="2380">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duree">Durée (jours)</label>
+                        <input type="number" id="duree" name="duree" placeholder="26">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" placeholder="Décrivez votre voyage..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Photo de couverture -->
+                <div class="form-group">
+                    <label>Photo de couverture</label>
+                    <div class="photo-upload" onclick="document.getElementById('photoCover').click()">
+                        <input type="file" id="photoCover" accept="image/*">
+                        <p>📸 Cliquez pour ajouter une photo</p>
+                        <img id="photoPreview" class="photo-preview" alt="Preview">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Étapes du voyage -->
+            <section class="form-section">
+                <h2 class="section-title">Étapes du voyage</h2>
+
+                <!-- CSV Import -->
+                <div class="csv-import">
+                    <div class="csv-title">📊 Import rapide par CSV</div>
+                    <p class="hint" style="margin-bottom: 1rem;">Importez toutes vos étapes d'un coup via un fichier CSV</p>
+                    <div class="csv-actions">
+                        <label for="csvFile" class="file-input-label">
+                            Choisir un fichier CSV
+                        </label>
+                        <input type="file" id="csvFile" accept=".csv" style="display: none;">
+                        <span class="csv-filename" id="csvFilename">Aucun fichier sélectionné</span>
+                        <button type="button" class="btn-secondary" onclick="downloadCSVTemplate()">
+                            ⬇️ Télécharger le modèle
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Étapes list -->
+                <div id="etapesList" class="etapes-list">
+                    <!-- Dynamic etapes will be added here -->
+                </div>
+
+                <button type="button" class="btn-secondary" onclick="addEtape()">
+                    + Ajouter une étape
+                </button>
+            </section>
+
+            <!-- Actions -->
+            <div class="form-actions">
+                <a href="admin-dashboard.html" class="btn-secondary">Annuler</a>
+                <button type="submit" class="btn-primary">Sauvegarder le voyage</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        let etapeCounter = 0;
+        let etapes = [];
+
+        // Add etape
+        function addEtape() {
+            etapeCounter++;
+            const etapeHTML = `
+                <div class="etape-item" id="etape-${etapeCounter}">
+                    <div class="etape-header">
+                        <span class="etape-number">Étape ${etapeCounter}</span>
+                        <button type="button" class="btn-remove-etape" onclick="removeEtape(${etapeCounter})">
+                            Supprimer
+                        </button>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nom de la destination</label>
+                            <input type="text" name="etape_nom_${etapeCounter}" placeholder="Ex: Turin">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Emoji</label>
+                            <input type="text" name="etape_emoji_${etapeCounter}" placeholder="🏛️" maxlength="2">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date début</label>
+                            <input type="date" name="etape_date_debut_${etapeCounter}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date fin</label>
+                            <input type="date" name="etape_date_fin_${etapeCounter}">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Description</label>
+                            <textarea name="etape_description_${etapeCounter}" placeholder="Description de la destination..."></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Nom de l'hôtel</label>
+                            <input type="text" name="etape_hotel_${etapeCounter}" placeholder="Ex: NH Collection Torino">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Catégorie hôtel</label>
+                            <input type="text" name="etape_hotel_cat_${etapeCounter}" placeholder="4★ Palazzo Historique">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Lien Booking.com</label>
+                            <input type="url" name="etape_booking_${etapeCounter}" placeholder="https://booking.com/...">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Expérience incluse</label>
+                            <textarea name="etape_experience_${etapeCounter}" placeholder="Description de l'expérience..."></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Activités (une par ligne)</label>
+                            <textarea name="etape_activites_${etapeCounter}" placeholder="Activité 1
+Activité 2
+Activité 3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('etapesList').insertAdjacentHTML('beforeend', etapeHTML);
+        }
+
+        // Remove etape
+        function removeEtape(id) {
+            const etape = document.getElementById(`etape-${id}`);
+            if (etape && confirm('Supprimer cette étape ?')) {
+                etape.remove();
+            }
+        }
+
+        // Photo preview
+        document.getElementById('photoCover').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('photoPreview');
+                    preview.src = e.target.result;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // CSV file selection
+        document.getElementById('csvFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('csvFilename').textContent = file.name;
+                parseCSV(file);
+            }
+        });
+
+        // Parse CSV
+        function parseCSV(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                const lines = csv.split('\n');
+                
+                // Skip header
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        const values = line.split(',');
+                        // Add etape and populate with CSV data
+                        addEtape();
+                        // TODO: Populate fields with values
+                    }
+                }
+                
+                alert(`${lines.length - 1} étapes importées !`);
+            };
+            reader.readAsText(file);
+        }
+
+        // Download CSV template
+        function downloadCSVTemplate() {
+            const csv = `Destination,Emoji,Date début,Date fin,Description,Hôtel,Catégorie,Booking,Expérience,Activités
+Turin,🏛️,29/07/2026,30/07/2026,Capitale baroque du Piémont...,NH Collection Torino,4★ Palazzo,https://booking.com/...,Visite à vélo,Musée Égyptien|Mole Antonelliana
+Bologne,🍝,31/07/2026,01/08/2026,La Rossa la Dotta la Grassa...,Hôtel Centre,4★ Charme,https://booking.com/...,Visite guidée famille,Torre|Piazza Maggiore`;
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'modele-etapes.csv';
+            a.click();
+        }
+
+        // Form submission
+        document.getElementById('voyageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const voyageData = {
+                titre: formData.get('titre'),
+                dateDebut: formData.get('dateDebut'),
+                dateFin: formData.get('dateFin'),
+                pays: formData.get('pays'),
+                distance: formData.get('distance'),
+                duree: formData.get('duree'),
+                description: formData.get('description'),
+                etapes: []
+            };
+
+            // Collect etapes
+            for (let i = 1; i <= etapeCounter; i++) {
+                const nom = formData.get(`etape_nom_${i}`);
+                if (nom) {
+                    voyageData.etapes.push({
+                        nom: nom,
+                        emoji: formData.get(`etape_emoji_${i}`),
+                        dateDebut: formData.get(`etape_date_debut_${i}`),
+                        dateFin: formData.get(`etape_date_fin_${i}`),
+                        description: formData.get(`etape_description_${i}`),
+                        hotel: formData.get(`etape_hotel_${i}`),
+                        hotelCategorie: formData.get(`etape_hotel_cat_${i}`),
+                        booking: formData.get(`etape_booking_${i}`),
+                        experience: formData.get(`etape_experience_${i}`),
+                        activites: formData.get(`etape_activites_${i}`)?.split('\n').filter(a => a.trim())
+                    });
+                }
+            }
+
+            console.log('Voyage data:', voyageData);
+            
+            // TODO: Save to Firebase
+            // For now, just show success message
+            document.getElementById('successMessage').classList.add('show');
+            window.scrollTo(0, 0);
+            
+            setTimeout(() => {
+                // Redirect to dashboard
+                // window.location.href = 'admin-dashboard.html';
+            }, 2000);
+        });
+
+        // Initialize with one etape
+        addEtape();
+    </script>
+</body>
+</html>
