@@ -211,7 +211,6 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyACL6ALAlLyL5T11BDPiwEbZZ0_Uvi9zCI",
@@ -224,7 +223,6 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
 
         const loginForm = document.getElementById('loginForm');
         const emailInput = document.getElementById('email');
@@ -232,12 +230,6 @@
         const loginBtn = document.getElementById('loginBtn');
         const errorMessage = document.getElementById('errorMessage');
         const loading = document.getElementById('loading');
-
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                window.location.href = 'admin-dashboard.html';
-            }
-        });
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -251,54 +243,28 @@
             errorMessage.classList.remove('show');
 
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                
-                if (userDoc.exists() && userDoc.data().role === 'admin') {
-                    window.location.href = 'admin-dashboard.html';
-                } else {
-                    await auth.signOut();
-                    showError('Acces refuse. Vous n avez pas les droits d administration.');
-                }
+                await signInWithEmailAndPassword(auth, email, password);
+                alert('Connexion reussie !');
+                window.location.href = 'admin-dashboard.html';
 
             } catch (error) {
                 console.error('Login error:', error);
                 
                 let errorMsg = 'Erreur de connexion. ';
-                switch (error.code) {
-                    case 'auth/invalid-email':
-                        errorMsg += 'Email invalide.';
-                        break;
-                    case 'auth/user-disabled':
-                        errorMsg += 'Ce compte a ete desactive.';
-                        break;
-                    case 'auth/user-not-found':
-                        errorMsg += 'Aucun compte trouve avec cet email.';
-                        break;
-                    case 'auth/wrong-password':
-                        errorMsg += 'Mot de passe incorrect.';
-                        break;
-                    case 'auth/invalid-credential':
-                        errorMsg += 'Email ou mot de passe incorrect.';
-                        break;
-                    default:
-                        errorMsg += error.message;
+                if (error.code === 'auth/invalid-credential') {
+                    errorMsg += 'Email ou mot de passe incorrect.';
+                } else {
+                    errorMsg += error.message;
                 }
                 
-                showError(errorMsg);
+                errorMessage.textContent = errorMsg;
+                errorMessage.classList.add('show');
             } finally {
                 loginBtn.disabled = false;
                 loginBtn.textContent = 'Se connecter';
                 loading.classList.remove('show');
             }
         });
-
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.classList.add('show');
-        }
     </script>
 </body>
 </html>
