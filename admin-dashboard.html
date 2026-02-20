@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin | Miara Voyages</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -16,6 +17,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background: var(--gris-perle);
+            color: var(--noir);
         }
         .header {
             background: var(--noir);
@@ -24,10 +26,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .logo {
             font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .user-info {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
         .btn-logout {
             background: transparent;
@@ -35,32 +48,450 @@
             color: var(--or-rose);
             padding: 0.6rem 1.5rem;
             cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s;
+        }
+        .btn-logout:hover {
+            background: var(--or-rose);
+            color: var(--blanc);
         }
         .main {
             max-width: 1400px;
             margin: 0 auto;
             padding: 3rem 2rem;
         }
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .page-subtitle {
+            color: #666;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        .stat-card {
+            background: var(--blanc);
+            padding: 2rem;
+            border-left: 4px solid var(--or-rose);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--or-rose);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #666;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+        }
         .btn-primary {
             background: var(--or-rose);
             color: var(--blanc);
             border: none;
             padding: 1rem 2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn-primary:hover {
+            background: #a65d68;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(183, 110, 121, 0.3);
+        }
+        .voyages-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .voyage-item {
+            background: var(--blanc);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .voyage-item:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .voyage-info {
+            flex: 1;
+        }
+        .voyage-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--noir);
+        }
+        .voyage-meta {
+            display: flex;
+            gap: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .voyage-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn-edit, .btn-view, .btn-delete {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn-edit {
+            background: var(--noir);
+            color: var(--blanc);
+        }
+        .btn-edit:hover {
+            background: #333;
+        }
+        .btn-view {
+            background: transparent;
+            border: 1px solid var(--or-rose);
+            color: var(--or-rose);
+        }
+        .btn-view:hover {
+            background: var(--or-rose);
+            color: var(--blanc);
+        }
+        .btn-delete {
+            background: transparent;
+            border: 1px solid #c33;
+            color: #c33;
+        }
+        .btn-delete:hover {
+            background: #c33;
+            color: var(--blanc);
+        }
+        .empty-state {
+            background: var(--blanc);
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        .empty-text {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--blanc);
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .modal-text {
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid #ccc;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-confirm {
+            background: #c33;
+            color: var(--blanc);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="logo">MIARA Admin</div>
-        <button class="btn-logout" id="logoutBtn">Déconnexion</button>
+        <div class="user-menu">
+            <span class="user-info" id="userEmail">Chargement...</span>
+            <button class="btn-logout" id="logoutBtn">Deconnexion</button>
+        </div>
     </header>
+
     <main class="main">
-        <h1>Dashboard</h1>
-        <a href="admin-voyage.html" class="btn-primary">+ Créer un voyage</a>
-        <div id="voyagesList"></div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Gerez vos carnets de voyage</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalVoyages">0</div>
+                <div class="stat-label">Voyages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalCountries">0</div>
+                <div class="stat-label">Pays visites</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalDestinations">0</div>
+                <div class="stat-label">Destinations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalPhotos">0</div>
+                <div class="stat-label">Photos</div>
+            </div>
+        </div>
+
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Mes Voyages</h2>
+                <a href="admin-voyage.html" class="btn-primary">+ Creer un voyage</a>
+            </div>
+
+            <div id="loading" class="loading" style="display: none;">
+                Chargement des voyages...
+            </div>
+
+            <div id="voyagesList" class="voyages-list"></div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-icon">✈️</div>
+                <p class="empty-text">Aucun voyage pour le moment</p>
+                <a href="admin-voyage.html" class="btn-primary">Creer votre premier voyage</a>
+            </div>
+        </section>
     </main>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Confirmer la suppression</h3>
+            <p class="modal-text">Etes-vous sur de vouloir supprimer ce voyage ? Cette action est irreversible.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeDeleteModal()">Annuler</button>
+                <button class="btn-confirm" id="confirmDeleteBtn">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, getDocs, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6uJDRmjZNXyUvwiW7lxUyXKFDU0pC-eA",
+            authDomain: "miara-voyages-2.firebaseapp.com",
+            projectId: "miara-voyages-2",
+            storageBucket: "miara-voyages-2.firebasestorage.app",
+            messagingSenderId: "375390867380",
+            appId: "1:375390867380:web:9a2b1887941ad062a16ce1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentVoyageId = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('userEmail').textContent = user.email;
+                await loadVoyages();
+            } else {
+                window.location.href = 'admin-login.html';
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = 'admin-login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Erreur lors de la deconnexion');
+            }
+        });
+
+        async function loadVoyages() {
+            const loading = document.getElementById('loading');
+            const voyagesList = document.getElementById('voyagesList');
+            const emptyState = document.getElementById('emptyState');
+
+            loading.style.display = 'block';
+            voyagesList.innerHTML = '';
+
+            try {
+                const voyagesSnapshot = await getDocs(collection(db, 'voyages'));
+                const voyages = [];
+                
+                voyagesSnapshot.forEach((doc) => {
+                    voyages.push({ id: doc.id, ...doc.data() });
+                });
+
+                loading.style.display = 'none';
+
+                if (voyages.length === 0) {
+                    voyagesList.style.display = 'none';
+                    emptyState.style.display = 'block';
+                } else {
+                    voyagesList.style.display = 'grid';
+                    emptyState.style.display = 'none';
+                    displayVoyages(voyages);
+                    updateStats(voyages);
+                }
+            } catch (error) {
+                console.error('Error loading voyages:', error);
+                loading.style.display = 'none';
+                alert('Erreur lors du chargement des voyages');
+            }
+        }
+
+        function displayVoyages(voyages) {
+            const voyagesList = document.getElementById('voyagesList');
+            
+            voyagesList.innerHTML = voyages.map(voyage => {
+                const dateDebut = voyage.dateDebut ? new Date(voyage.dateDebut).toLocaleDateString('fr-FR') : '';
+                const dateFin = voyage.dateFin ? new Date(voyage.dateFin).toLocaleDateString('fr-FR') : '';
+                const dates = dateDebut && dateFin ? `${dateDebut} - ${dateFin}` : '';
+                
+                return `
+                    <div class="voyage-item">
+                        <div class="voyage-info">
+                            <h3 class="voyage-title">${voyage.titre || 'Sans titre'}</h3>
+                            <div class="voyage-meta">
+                                <span>${voyage.pays || ''}</span>
+                                <span>${dates}</span>
+                                <span>${voyage.etapes?.length || 0} etapes</span>
+                            </div>
+                        </div>
+                        <div class="voyage-actions">
+                            <button class="btn-edit" onclick="editVoyage('${voyage.id}')">Modifier</button>
+                            <button class="btn-view" onclick="viewVoyage('${voyage.id}')">Voir</button>
+                            <button class="btn-delete" onclick="showDeleteModal('${voyage.id}')">Supprimer</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStats(voyages) {
+            const totalVoyages = voyages.length;
+            let totalDestinations = 0;
+            const countries = new Set();
+
+            voyages.forEach(voyage => {
+                if (voyage.pays) {
+                    const flags = voyage.pays.match(/[\u{1F1E6}-\u{1F1FF}]/gu) || [];
+                    flags.forEach(flag => countries.add(flag));
+                }
+                totalDestinations += voyage.etapes?.length || 0;
+            });
+
+            document.getElementById('totalVoyages').textContent = totalVoyages;
+            document.getElementById('totalCountries').textContent = countries.size;
+            document.getElementById('totalDestinations').textContent = totalDestinations;
+            document.getElementById('totalPhotos').textContent = 0;
+        }
+
+        window.editVoyage = (id) => {
+            window.location.href = `admin-voyage.html?id=${id}`;
+        };
+
+        window.viewVoyage = (id) => {
+            alert('Generation de page publique a venir !');
+        };
+
+        window.showDeleteModal = (id) => {
+            currentVoyageId = id;
+            document.getElementById('deleteModal').classList.add('show');
+        };
+
+        window.closeDeleteModal = () => {
+            currentVoyageId = null;
+            document.getElementById('deleteModal').classList.remove('show');
+        };
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (!currentVoyageId) return;
+
+            try {
+                await deleteDoc(doc(db, 'voyages', currentVoyageId));
+                closeDeleteModal();
+                await loadVoyages();
+                alert('Voyage supprime avec succes');
+            } catch (error) {
+                console.error('Delete error:', error);
+                alert('Erreur lors de la suppression');
+            }
+        });
+
+        document.getElementById('deleteModal').addEventListener('click', (e) => {
+            if (e.target.id === 'deleteModal') {
+                closeDeleteModal();
+            }
+        });
+    </script>
 </body>
 </html>
