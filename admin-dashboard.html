@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin | Miara Voyages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --noir: #1A1A1A;
+            --or-rose: #B76E79;
+            --gris-perle: #F8F8F8;
+            --blanc: #FFFFFF;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gris-perle);
+        }
+        .header {
+            background: var(--noir);
+            color: var(--blanc);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--or-rose);
+            color: var(--or-rose);
+            padding: 0.6rem 1.5rem;
+            cursor: pointer;
+        }
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        .btn-primary {
+            background: var(--or-rose);
+            color: var(--blanc);
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">MIARA Admin</div>
+        <button class="btn-logout" id="logoutBtn">Déconnexion</button>
+    </header>
+    <main class="main">
+        <h1>Dashboard</h1>
+        <a href="admin-voyage.html" class="btn-primary">+ Créer un voyage</a>
+        <div id="voyagesList"></div>
+    </main>
+</body>
+</html>
