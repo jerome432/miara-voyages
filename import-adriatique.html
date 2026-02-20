@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Adriatique 2026</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #1A1A1A;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #B76E79;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: #a65d68;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Import Road Trip Adriatique 2026</h1>
+        <p>Ce script va importer le voyage complet dans Firestore.</p>
+        <p><strong>13 destinations avec tous les details</strong></p>
+        
+        <button id="importBtn" class="btn">Importer le voyage</button>
+        
+        <div id="status" class="status"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6uJDRmjZNXyUvwiW7lxUyXKFDU0pC-eA",
+            authDomain: "miara-voyages-2.firebaseapp.com",
+            projectId: "miara-voyages-2",
+            storageBucket: "miara-voyages-2.firebasestorage.app",
+            messagingSenderId: "375390867380",
+            appId: "1:375390867380:web:9a2b1887941ad062a16ce1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const voyageData = {
+            titre: "Road Trip Adriatique",
+            dateDebut: "2026-07-29",
+            dateFin: "2026-08-23",
+            pays: "🇮🇹 🇭🇷 🇸🇮",
+            distance: 2380,
+            duree: 26,
+            description: "Un voyage de 26 jours à travers l'Italie, la Croatie et la Slovénie, le long de la côte adriatique.",
+            photoCouverture: null,
+            etapes: [
+                {
+                    nom: "Turin",
+                    emoji: "🏛️",
+                    dateDebut: "2026-07-29",
+                    dateFin: "2026-07-30",
+                    description: "Turin, la belle inconnue du Piémont, se révèle moins ostentatoire que ses voisines du Nord. Ses rues adoptent pourtant un urbanisme évoquant le style haussmannien de Paris.",
+                    hotel: "NH Collection Torino Piazza Carlina",
+                    hotelCategorie: "4★ Palazzo Historique • XVIIe siècle",
+                    booking: "https://www.booking.com/hotel/it/nh-collection-piazza-carlina.fr.html",
+                    experience: "Turin à vélo électrique avec guide francophone privé. Du Quadrilatero Romano à l'église Santa Maria al Monte dei Cappuccini.",
+                    activites: [
+                        "Musée Égyptien (2ème collection mondiale)",
+                        "Mole Antonelliana & Musée du Cinéma",
+                        "Palais Royal et résidences savoyardes UNESCO",
+                        "Bicerin dans un caffè historique",
+                        "Aperitivo et vermouth traditionnel"
+                    ]
+                },
+                {
+                    nom: "Bologne",
+                    emoji: "🍝",
+                    dateDebut: "2026-07-31",
+                    dateFin: "2026-08-01",
+                    description: "Bologne, capitale de l'Émilie-Romagne, est la Dotta pour son université, la Rossa pour ses bâtiments, et la Grassa pour sa richesse gastronomique.",
+                    hotel: "Hôtel Centre Historique Bologne",
+                    hotelCategorie: "4★ Charme Médiéval",
+                    booking: "https://www.booking.com/city/it/bologna.fr.html",
+                    experience: "Visite de Bologne conçue pour les familles avec guide francophone privé.",
+                    activites: [
+                        "Torre degli Asinelli (498 marches)",
+                        "Piazza Maggiore et basilique San Petronio",
+                        "Promenade sous les 40km de portici",
+                        "Dégustation ragù alla bolognese",
+                        "Mercato di Mezzo"
+                    ]
+                },
+                {
+                    nom: "Sirolo",
+                    emoji: "🏖️",
+                    dateDebut: "2026-08-02",
+                    dateFin: "2026-08-04",
+                    description: "Perché sur les falaises du parc naturel du Conero, Sirolo offre des plages de galets blancs et une mer turquoise.",
+                    hotel: "Hotel Vue Mer Sirolo",
+                    hotelCategorie: "4★ Face à l'Adriatique",
+                    booking: "",
+                    experience: "",
+                    activites: [
+                        "Plage des Deux Sœurs (Spiaggia delle Due Sorelle)",
+                        "Randonnée dans le Parc du Conero",
+                        "Centre médiéval de Sirolo",
+                        "Baignade dans les criques",
+                        "Cuisine marchigiana"
+                    ]
+                },
+                {
+                    nom: "Ferry Ancône-Split",
+                    emoji: "⛴️",
+                    dateDebut: "2026-08-05",
+                    dateFin: "2026-08-05",
+                    description: "Traversée nocturne de l'Adriatique depuis Ancône vers Split en Croatie. Une nuit à bord pour rejoindre la côte dalmate.",
+                    hotel: "Ferry Nuit (Cabine)",
+                    hotelCategorie: "Traversée maritime",
+                    booking: "",
+                    experience: "Traversée de l'Adriatique avec vue sur le coucher de soleil.",
+                    activites: [
+                        "Embarquement à Ancône",
+                        "Soirée sur le pont du ferry",
+                        "Arrivée matinale à Split"
+                    ]
+                },
+                {
+                    nom: "Biograd na Moru",
+                    emoji: "⛵",
+                    dateDebut: "2026-08-06",
+                    dateFin: "2026-08-08",
+                    description: "Station balnéaire familiale sur la côte dalmate, entourée de pins et d'eaux cristallines. Base idéale pour explorer les îles Kornati.",
+                    hotel: "Hotel Plage Biograd",
+                    hotelCategorie: "4★ Bord de mer",
+                    booking: "",
+                    experience: "",
+                    activites: [
+                        "Plages de Biograd (Soline, Bosana)",
+                        "Parc national des Kornati en bateau",
+                        "Centre historique et port de plaisance",
+                        "Sports nautiques",
+                        "Excursion aux îles voisines"
+                    ]
+                },
+                {
+                    nom: "Lacs de Plitvice",
+                    emoji: "💧",
+                    dateDebut: "2026-08-09",
+                    dateFin: "2026-08-10",
+                    description: "Parc national mythique avec 16 lacs en terrasses reliés par cascades spectaculaires. Eaux turquoise, forêts anciennes, passerelles en bois.",
+                    hotel: "Hotel près Entrée 1 Plitvice",
+                    hotelCategorie: "3★ Parc National",
+                    booking: "https://www.booking.com/city/hr/plitvicka-jezera.fr.html",
+                    experience: "Exploration à pied et en bateau du parc national. Train panoramique et traversée en bateau électrique.",
+                    activites: [
+                        "Randonnée sur passerelles en bois",
+                        "Lacs inférieurs et supérieurs",
+                        "Grande cascade Veliki Slap",
+                        "Bateau électrique sur le lac Kozjak",
+                        "Train panoramique du parc"
+                    ]
+                },
+                {
+                    nom: "Pivka",
+                    emoji: "🦇",
+                    dateDebut: "2026-08-11",
+                    dateFin: "2026-08-11",
+                    description: "Région slovène célèbre pour ses grottes de Postojna et le château de Predjama construit dans une falaise.",
+                    hotel: "Hotel Pivka Region",
+                    hotelCategorie: "3★ Proche grottes",
+                    booking: "",
+                    experience: "Visite des grottes de Postojna en petit train puis à pied.",
+                    activites: [
+                        "Grottes de Postojna (train souterrain)",
+                        "Château de Predjama (falaise)",
+                        "Visite des cavernes karstiques",
+                        "Observation du protée (salamandre aveugle)"
+                    ]
+                },
+                {
+                    nom: "Ljubljana",
+                    emoji: "🐉",
+                    dateDebut: "2026-08-12",
+                    dateFin: "2026-08-13",
+                    description: "Capitale slovène charmante et compacte, avec son centre piéton, ses ponts iconiques et son château médiéval surplombant la ville.",
+                    hotel: "Hotel Centre Ljubljana",
+                    hotelCategorie: "4★ Cœur historique",
+                    booking: "",
+                    experience: "",
+                    activites: [
+                        "Château de Ljubljana (funiculaire)",
+                        "Triple Pont et Pont des Dragons",
+                        "Vieille ville baroque",
+                        "Marché central de Plečnik",
+                        "Balade le long de la Ljubljanica"
+                    ]
+                },
+                {
+                    nom: "Lac de Bled",
+                    emoji: "🏰",
+                    dateDebut: "2026-08-14",
+                    dateFin: "2026-08-16",
+                    description: "Lac alpin emblématique avec son île et son église, dominé par un château médiéval. Décor de carte postale au pied des Alpes Juliennes.",
+                    hotel: "Chalet Traditionnel Parc Triglav",
+                    hotelCategorie: "Charme Montagne",
+                    booking: "https://www.booking.com/city/si/bled.fr.html",
+                    experience: "",
+                    activites: [
+                        "Pletna (barque traditionnelle) vers l'île",
+                        "Château de Bled et vue panoramique",
+                        "Tour du lac à pied ou vélo (6km)",
+                        "Dégustation de kremšnita (gâteau crème)",
+                        "Excursion au lac de Bohinj plus sauvage"
+                    ]
+                },
+                {
+                    nom: "Bovec",
+                    emoji: "🚣",
+                    dateDebut: "2026-08-17",
+                    dateFin: "2026-08-18",
+                    description: "Capitale slovène des sports d'aventure dans la vallée de la Soča, aux eaux émeraude. Point de départ pour le rafting et le canyoning.",
+                    hotel: "Hotel Bovec Vallée Soča",
+                    hotelCategorie: "3★ Aventure",
+                    booking: "",
+                    experience: "",
+                    activites: [
+                        "Rafting sur la rivière Soča",
+                        "Gorges de Tolmin",
+                        "Cascades (Boka, Virje)",
+                        "Randonnée dans le Parc Triglav",
+                        "Zipline et canyoning"
+                    ]
+                },
+                {
+                    nom: "Udine",
+                    emoji: "🎨",
+                    dateDebut: "2026-08-19",
+                    dateFin: "2026-08-20",
+                    description: "Ville du Frioul au charme vénitien, avec son château, ses places élégantes et sa gastronomie réputée.",
+                    hotel: "Hotel Centre Udine",
+                    hotelCategorie: "4★ Historique",
+                    booking: "",
+                    experience: "",
+                    activites: [
+                        "Château d'Udine et musées",
+                        "Piazza della Libertà (style vénitien)",
+                        "Cathédrale et fresques Tiepolo",
+                        "Gastronomie frioulane",
+                        "Aperitivo sur les places"
+                    ]
+                },
+                {
+                    nom: "Bergame",
+                    emoji: "🏔️",
+                    dateDebut: "2026-08-21",
+                    dateFin: "2026-08-21",
+                    description: "Ville haute médiévale fortifiée (Città Alta) reliée à la ville basse moderne par funiculaire. Joyau de Lombardie.",
+                    hotel: "Hotel Bergame Basse",
+                    hotelCategorie: "4★ Moderne",
+                    booking: "",
+                    experience: "",
+                    activites: [
+                        "Funiculaire vers Città Alta",
+                        "Remparts vénitiens UNESCO",
+                        "Piazza Vecchia et Torre Civica",
+                        "Basilique Santa Maria Maggiore",
+                        "Vue panoramique sur les Alpes"
+                    ]
+                },
+                {
+                    nom: "Aoste",
+                    emoji: "⛰️",
+                    dateDebut: "2026-08-22",
+                    dateFin: "2026-08-22",
+                    description: "Capitale du Val d'Aoste, surnommée la Rome des Alpes pour ses vestiges romains. Porte du Mont-Blanc et du Grand-Paradis.",
+                    hotel: "Hotel Aoste Centre",
+                    hotelCategorie: "3★ Alpin",
+                    booking: "",
+                    experience: "",
+                    activites: [
+                        "Arc d'Auguste et Porta Praetoria romaine",
+                        "Cathédrale et crypte",
+                        "Marché de la vieille ville",
+                        "Vue sur le Mont-Blanc",
+                        "Cuisine valdôtaine (fontine, carbonade)"
+                    ]
+                }
+            ],
+            createdAt: serverTimestamp()
+        };
+
+        document.getElementById('importBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('importBtn');
+            const status = document.getElementById('status');
+
+            btn.disabled = true;
+            status.className = 'status loading';
+            status.textContent = 'Import en cours...';
+
+            try {
+                if (!auth.currentUser) {
+                    throw new Error('Vous devez etre connecte');
+                }
+
+                voyageData.createdBy = auth.currentUser.uid;
+
+                await addDoc(collection(db, 'voyages'), voyageData);
+
+                status.className = 'status success';
+                status.innerHTML = `
+                    ✅ <strong>Voyage importe avec succes !</strong><br><br>
+                    Le Road Trip Adriatique 2026 avec ses 13 destinations est maintenant dans Firestore.<br><br>
+                    <a href="admin-dashboard.html" style="color: #155724; text-decoration: underline;">
+                        Retourner au dashboard
+                    </a>
+                `;
+
+            } catch (error) {
+                console.error('Erreur import:', error);
+                status.className = 'status error';
+                status.innerHTML = `
+                    ❌ <strong>Erreur lors de l'import</strong><br>
+                    ${error.message}<br><br>
+                    Assurez-vous d'etre connecte a l'admin.
+                `;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
