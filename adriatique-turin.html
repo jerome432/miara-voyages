@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turin | Road Trip Adriatique 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --noir: #1A1A1A;
+            --or-rose: #B76E79;
+            --gris-perle: #F8F8F8;
+            --blanc: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gris-perle);
+            color: var(--noir);
+        }
+
+        /* BURGER MENU */
+        .burger-menu {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            background: var(--blanc);
+            padding: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--noir);
+            transition: all 0.3s;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--noir);
+            z-index: 999;
+            transition: right 0.3s ease;
+            padding: 6rem 3rem 3rem;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+        }
+
+        .menu-overlay.active {
+            right: 0;
+        }
+
+        .menu-overlay nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .menu-overlay a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            transition: all 0.3s;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* HEADER */
+        .header {
+            background: var(--noir);
+            color: var(--blanc);
+            padding: 1.5rem 2rem;
+        }
+
+        .back-link {
+            color: var(--or-rose);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* HERO */
+        .hero {
+            background: var(--noir);
+            color: var(--blanc);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .hero-emoji {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        .hero-dates {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--or-rose);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* TABS */
+        .tabs {
+            background: var(--blanc);
+            border-bottom: 2px solid var(--or-rose);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .tabs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .tab-button {
+            flex: 1;
+            max-width: 300px;
+            padding: 1.5rem 2rem;
+            background: transparent;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tab-button:hover {
+            background: var(--gris-perle);
+            color: var(--noir);
+        }
+
+        .tab-button.active {
+            color: var(--or-rose);
+            border-bottom-color: var(--or-rose);
+            background: var(--gris-perle);
+        }
+
+        /* TAB CONTENT */
+        .tab-content {
+            display: none;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .content-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--noir);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--or-rose);
+        }
+
+        .content-text {
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 1.5rem;
+        }
+
+        /* CATEGORIES */
+        .category {
+            background: var(--blanc);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--or-rose);
+        }
+
+        .category-icon {
+            font-size: 2rem;
+        }
+
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        .activity-list {
+            list-style: none;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            padding: 1rem;
+            background: var(--gris-perle);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .activity-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .activity-details {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* HOTEL CARD */
+        .hotel-card {
+            background: var(--blanc);
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .hotel-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hotel-category {
+            color: var(--or-rose);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .hotel-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            background: var(--or-rose);
+            color: var(--blanc);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .hotel-link:hover {
+            background: #a65d68;
+        }
+
+        /* EXPERIENCE BOX */
+        .experience-box {
+            background: rgba(183, 110, 121, 0.1);
+            border-left: 4px solid var(--or-rose);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .experience-title {
+            font-weight: 600;
+            color: var(--or-rose);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* PHOTO PLACEHOLDER */
+        .photo-placeholder {
+            background: var(--gris-perle);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: #999;
+            font-size: 3rem;
+            margin: 2rem 0;
+        }
+
+        .coming-soon {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #999;
+        }
+
+        .coming-soon-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            .tabs-container {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Burger Menu -->
+    <div class="burger-menu" id="burgerMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="menu-overlay" id="menuOverlay">
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="adriatique-2026.html">Toutes les étapes</a>
+            <a href="#about">À propos</a>
+            <a href="login.html">🔐 Connexion</a>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="adriatique-2026.html" class="back-link">← Toutes les étapes</a>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-emoji">🏛️</div>
+        <h1>Turin</h1>
+        <div class="hero-dates">29-30 juillet 2026</div>
+        <span class="hero-badge">🇮🇹 Italie</span>
+    </section>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tabs-container">
+            <button class="tab-button active" data-tab="decouvrir">📖 Découvrir</button>
+            <button class="tab-button" data-tab="afaire">✅ À faire</button>
+            <button class="tab-button" data-tab="voyage">📸 Notre voyage</button>
+        </div>
+    </div>
+
+    <!-- Tab Content: Découvrir -->
+    <div id="decouvrir" class="tab-content active">
+        <div class="content-section">
+            <h2 class="section-title">Découvrir Turin</h2>
+            
+            <p class="content-text">
+                Turin, la belle inconnue du Piémont, se révèle moins ostentatoire que ses voisines du Nord. 
+                Ses rues adoptent pourtant un urbanisme évoquant le style haussmannien de Paris, avec de larges 
+                boulevards bordés d'arcades élégantes qui invitent à la flânerie.
+            </p>
+
+            <p class="content-text">
+                Ancienne capitale du royaume de Savoie, Turin conserve un patrimoine royal exceptionnel. 
+                Le Palazzo Reale, résidence des ducs de Savoie puis des rois d'Italie, témoigne de cette 
+                grandeur passée. La ville abrite également le deuxième musée égyptien au monde après celui du Caire.
+            </p>
+
+            <h3 class="section-subtitle">Histoire et Culture</h3>
+            
+            <p class="content-text">
+                La Mole Antonelliana, symbole de la ville, domine le skyline turinois de ses 167 mètres. 
+                Conçue initialement comme synagogue, elle abrite aujourd'hui le fascinant Musée national du cinéma. 
+                Son ascenseur panoramique offre une vue imprenable sur la ville et les Alpes.
+            </p>
+
+            <p class="content-text">
+                Turin est également la capitale du chocolat italien. Les célèbres gianduiotti, chocolats pralinés 
+                aux noisettes du Piémont, sont nés ici au XIXe siècle. Les caffè historiques comme Al Bicerin 
+                perpétuent la tradition de cette boisson chocolatée crémeuse qui fait la renommée de la ville.
+            </p>
+
+            <h3 class="section-subtitle">Architecture et Patrimoine</h3>
+            
+            <p class="content-text">
+                Le centre historique baroque de Turin, avec ses places majestueuses comme la Piazza Castello et 
+                la Piazza San Carlo, reflète l'ambition architecturale des Savoie. Les 18 kilomètres d'arcades 
+                qui parcourent la ville permettent de se promener à l'abri des intempéries.
+            </p>
+        </div>
+    </div>
+
+    <!-- Tab Content: À faire -->
+    <div id="afaire" class="tab-content">
+        <div class="content-section">
+            <h2 class="section-title">À faire à Turin</h2>
+
+            <!-- HOTEL -->
+            <div class="hotel-card">
+                <h3 class="hotel-name">NH Collection Torino Piazza Carlina</h3>
+                <div class="hotel-category">4★ Palazzo Historique • XVIIe siècle</div>
+                <p class="content-text">
+                    Installé dans un élégant palazzo du XVIIe siècle au cœur du quartier historique, 
+                    cet hôtel allie charme baroque et confort moderne.
+                </p>
+                <a href="https://www.booking.com/hotel/it/nh-collection-piazza-carlina.fr.html" 
+                   target="_blank" class="hotel-link">
+                    Voir sur Booking.com →
+                </a>
+            </div>
+
+            <!-- EXPERIENCE -->
+            <div class="experience-box">
+                <div class="experience-title">✨ Expérience incluse</div>
+                <p class="content-text">
+                    <strong>Turin à vélo électrique avec guide francophone privé</strong><br>
+                    Du Quadrilatero Romano à l'église Santa Maria al Monte dei Cappuccini, 
+                    découvrez Turin autrement en pédalant dans les rues historiques.
+                </p>
+            </div>
+
+            <!-- CULTURE -->
+            <div class="category">
+                <div class="category-header">
+                    <span class="category-icon">🏛️</span>
+                    <h3 class="category-title">Culture & Patrimoine</h3>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <span class="activity-icon">🏺</span>
+                        <div class="activity-content">
+                            <div class="activity-name">Musée Égyptien</div>
+                            <div class="activity-details">2ème collection mondiale • 2h • 15€</div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <span class="activity-icon">🎬</span>
+                        <div class="activity-content">
+                            <div class="activity-name">Mole Antonelliana & Musée du Cinéma</div>
+                            <div class="activity-details">Vue panoramique + musée interactif • 1h30 • 10€</div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <span class="activity-icon">👑</span>
+                        <div class="activity-content">
+                            <div class="activity-name">Palais Royal et résidences savoyardes UNESCO</div>
+                            <div class="activity-details">Patrimoine royal • 2h • 12€</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- GASTRONOMIE -->
+            <div class="category">
+                <div class="category-header">
+                    <span class="category-icon">🍽️</span>
+                    <h3 class="category-title">Gastronomie</h3>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <span class="activity-icon">☕</span>
+                        <div class="activity-content">
+                            <div class="activity-name">Bicerin dans un caffè historique</div>
+                            <div class="activity-details">Boisson traditionnelle chocolat-café-crème • Caffè Al Bicerin</div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <span class="activity-icon">🍷</span>
+                        <div class="activity-content">
+                            <div class="activity-name">Aperitivo et vermouth traditionnel</div>
+                            <div class="activity-details">Tradition piémontaise • Quartier Quadrilatero</div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <span class="activity-icon">🍫</span>
+                        <div class="activity-content">
+                            <div class="activity-name">Dégustation chocolat & gianduiotti</div>
+                            <div class="activity-details">Spécialité turinoise aux noisettes du Piémont</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- FAMILLE -->
+            <div class="category">
+                <div class="category-header">
+                    <span class="category-icon">👨‍👩‍👧‍👦</span>
+                    <h3 class="category-title">Famille & Enfants</h3>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <span class="activity-icon">🎬</span>
+                        <div class="activity-content">
+                            <div class="activity-name">Musée du Cinéma (Mole)</div>
+                            <div class="activity-details">Expérience interactive pour tous âges</div>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <span class="activity-icon">🌳</span>
+                        <div class="activity-content">
+                            <div class="activity-name">Parc du Valentino</div>
+                            <div class="activity-details">Détente au bord du Pô • Château médiéval</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Content: Notre voyage -->
+    <div id="voyage" class="tab-content">
+        <div class="coming-soon">
+            <div class="coming-soon-icon">✈️</div>
+            <h2 class="section-title">Cette aventure commence le 29 juillet 2026</h2>
+            <p class="content-text">
+                Revenez après notre voyage pour découvrir notre parcours en photos et nos anecdotes !
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Burger menu
+        const burgerMenu = document.getElementById('burgerMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        burgerMenu.addEventListener('click', () => {
+            burgerMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+        });
+
+        // Tabs
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.dataset.tab;
+                
+                // Remove active class from all
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked
+                button.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        // Check if photos exist (from localStorage or Firebase)
+        // If photos exist, switch default tab to "voyage"
+        // This will be implemented when photo upload is done
+    </script>
+</body>
+</html>
