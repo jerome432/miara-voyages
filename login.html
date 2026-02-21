@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Miara Voyages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --noir: #1A1A1A;
+            --or-rose: #B76E79;
+            --gris-perle: #F8F8F8;
+            --blanc: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--noir) 0%, #2A2A2A 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-container {
+            background: var(--blanc);
+            padding: 4rem 3rem;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--noir);
+            letter-spacing: 0.1em;
+        }
+
+        .logo-subtitle {
+            font-size: 0.9rem;
+            color: var(--or-rose);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--noir);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--noir);
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            background: var(--gris-perle);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--or-rose);
+            background: var(--blanc);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--or-rose);
+            color: var(--blanc);
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-login:hover {
+            background: #a65d68;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(183, 110, 121, 0.3);
+        }
+
+        .btn-login:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #fee;
+            border-left: 3px solid #c33;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #c33;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-link a {
+            color: var(--or-rose);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .back-link a:hover {
+            gap: 1rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 3rem 2rem;
+            }
+
+            .logo-text {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <div class="logo-text">MIARA</div>
+            <div class="logo-subtitle">Voyages</div>
+        </div>
+        
+        <h1>Espace Famille & Amis</h1>
+        <p class="subtitle">Connectez-vous pour accéder aux photos et anecdotes privées</p>
+
+        <div id="errorMessage" class="error-message"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="votre-email@exemple.com"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Mot de passe"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+            
+            <button type="submit" class="btn-login" id="loginBtn">
+                Se connecter
+            </button>
+
+            <div id="loading" class="loading">
+                Connexion en cours...
+            </div>
+        </form>
+        
+        <div class="back-link">
+            <a href="index.html">← Retour à l'accueil</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6uJDRmjZNXyUvwiW7lxUyXKFDU0pC-eA",
+            authDomain: "miara-voyages-2.firebaseapp.com",
+            projectId: "miara-voyages-2",
+            storageBucket: "miara-voyages-2.firebasestorage.app",
+            messagingSenderId: "375390867380",
+            appId: "1:375390867380:web:9a2b1887941ad062a16ce1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const loading = document.getElementById('loading');
+
+        // Check if already logged in
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Connexion...';
+            loading.classList.add('show');
+            errorMessage.classList.remove('show');
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // Redirect handled by onAuthStateChanged
+                window.location.href = 'index.html';
+
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                let errorMsg = 'Erreur de connexion. ';
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMsg += 'Email invalide.';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMsg += 'Ce compte a été désactivé.';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMsg += 'Aucun compte trouvé avec cet email.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMsg += 'Mot de passe incorrect.';
+                        break;
+                    case 'auth/invalid-credential':
+                        errorMsg += 'Email ou mot de passe incorrect.';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMsg += 'Trop de tentatives. Réessayez plus tard.';
+                        break;
+                    default:
+                        errorMsg += error.message;
+                }
+                
+                showError(errorMsg);
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Se connecter';
+                loading.classList.remove('show');
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+        }
+    </script>
+</body>
+</html>
