@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Trip Adriatique 2026 | Miara Voyages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --noir: #1A1A1A;
+            --or-rose: #B76E79;
+            --gris-perle: #F8F8F8;
+            --blanc: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--noir);
+            color: var(--blanc);
+        }
+
+        /* BURGER MENU */
+        .burger-menu {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--blanc);
+            transition: all 0.3s;
+        }
+
+        .burger-menu.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .burger-menu.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--noir);
+            z-index: 999;
+            transition: right 0.3s ease;
+            padding: 6rem 3rem 3rem;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+        }
+
+        .menu-overlay.active {
+            right: 0;
+        }
+
+        .menu-overlay nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .menu-overlay a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            transition: all 0.3s;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .menu-overlay a:hover {
+            color: var(--or-rose);
+            padding-left: 1rem;
+        }
+
+        /* HEADER */
+        .back-link {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            border-color: var(--or-rose);
+            color: var(--or-rose);
+        }
+
+        /* HERO */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--noir) 0%, #2A2A2A 100%);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--or-rose);
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            background: var(--gris-perle);
+            padding: 4rem 2rem 6rem;
+            min-height: 60vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--noir);
+        }
+
+        /* ETAPES GRID */
+        .etapes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .etape-card {
+            background: var(--blanc);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .etape-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .etape-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--noir) 0%, var(--or-rose) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .etape-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .etape-content {
+            padding: 2rem;
+        }
+
+        .etape-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .etape-emoji {
+            font-size: 2.5rem;
+        }
+
+        .etape-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--noir);
+        }
+
+        .etape-dates {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .etape-description {
+            color: #666;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .etape-footer {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .etape-number {
+            font-size: 0.85rem;
+            color: var(--or-rose);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .etape-link {
+            color: var(--or-rose);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .etapes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .back-link, .burger-menu {
+                top: 1rem;
+            }
+
+            .back-link {
+                left: 1rem;
+            }
+
+            .burger-menu {
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Link -->
+    <a href="index.html" class="back-link">← Accueil</a>
+
+    <!-- Burger Menu -->
+    <div class="burger-menu" id="burgerMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="menu-overlay" id="menuOverlay">
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="#voyages">Voyages</a>
+            <a href="#about">À propos</a>
+            <a href="login.html">🔐 Connexion</a>
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Road Trip Adriatique</h1>
+        <div class="hero-meta">
+            <span>🇮🇹 🇭🇷 🇸🇮</span>
+            <span>29 juillet - 23 août 2026</span>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">26</div>
+                <div class="stat-label">Jours</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">13</div>
+                <div class="stat-label">Étapes</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">2380</div>
+                <div class="stat-label">Km</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h2 class="section-title">Nos Étapes</h2>
+            
+            <div class="etapes-grid">
+                <!-- TURIN -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=0" class="etape-card">
+                    <div class="etape-image">🏛️</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🏛️</span>
+                            <h3 class="etape-title">Turin</h3>
+                        </div>
+                        <div class="etape-dates">29-30 juillet 2026</div>
+                        <p class="etape-description">
+                            Turin, la belle inconnue du Piémont, se révèle moins ostentatoire que ses voisines du Nord. Ses rues adoptent un urbanisme évoquant le style haussmannien de Paris.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 1/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- BOLOGNE -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=1" class="etape-card">
+                    <div class="etape-image">🍝</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🍝</span>
+                            <h3 class="etape-title">Bologne</h3>
+                        </div>
+                        <div class="etape-dates">31 juillet - 1er août 2026</div>
+                        <p class="etape-description">
+                            Bologne, capitale de l'Émilie-Romagne, est la Dotta pour son université, la Rossa pour ses bâtiments, et la Grassa pour sa richesse gastronomique.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 2/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- SIROLO -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=2" class="etape-card">
+                    <div class="etape-image">🏖️</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🏖️</span>
+                            <h3 class="etape-title">Sirolo</h3>
+                        </div>
+                        <div class="etape-dates">2-4 août 2026</div>
+                        <p class="etape-description">
+                            Perché sur les falaises du parc naturel du Conero, Sirolo offre des plages de galets blancs et une mer turquoise.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 3/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- FERRY -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=3" class="etape-card">
+                    <div class="etape-image">⛴️</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">⛴️</span>
+                            <h3 class="etape-title">Ferry Ancône-Split</h3>
+                        </div>
+                        <div class="etape-dates">5 août 2026</div>
+                        <p class="etape-description">
+                            Traversée nocturne de l'Adriatique depuis Ancône vers Split en Croatie. Une nuit à bord pour rejoindre la côte dalmate.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 4/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- BIOGRAD -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=4" class="etape-card">
+                    <div class="etape-image">⛵</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">⛵</span>
+                            <h3 class="etape-title">Biograd na Moru</h3>
+                        </div>
+                        <div class="etape-dates">6-8 août 2026</div>
+                        <p class="etape-description">
+                            Station balnéaire familiale sur la côte dalmate, entourée de pins et d'eaux cristallines. Base idéale pour explorer les îles Kornati.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 5/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- PLITVICE -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=5" class="etape-card">
+                    <div class="etape-image">💧</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">💧</span>
+                            <h3 class="etape-title">Lacs de Plitvice</h3>
+                        </div>
+                        <div class="etape-dates">9-10 août 2026</div>
+                        <p class="etape-description">
+                            Parc national mythique avec 16 lacs en terrasses reliés par cascades spectaculaires. Eaux turquoise, forêts anciennes, passerelles en bois.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 6/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- PIVKA -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=6" class="etape-card">
+                    <div class="etape-image">🦇</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🦇</span>
+                            <h3 class="etape-title">Pivka</h3>
+                        </div>
+                        <div class="etape-dates">11 août 2026</div>
+                        <p class="etape-description">
+                            Région slovène célèbre pour ses grottes de Postojna et le château de Predjama construit dans une falaise.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 7/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- LJUBLJANA -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=7" class="etape-card">
+                    <div class="etape-image">🐉</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🐉</span>
+                            <h3 class="etape-title">Ljubljana</h3>
+                        </div>
+                        <div class="etape-dates">12-13 août 2026</div>
+                        <p class="etape-description">
+                            Capitale slovène charmante et compacte, avec son centre piéton, ses ponts iconiques et son château médiéval surplombant la ville.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 8/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- BLED -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=8" class="etape-card">
+                    <div class="etape-image">🏰</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🏰</span>
+                            <h3 class="etape-title">Lac de Bled</h3>
+                        </div>
+                        <div class="etape-dates">14-16 août 2026</div>
+                        <p class="etape-description">
+                            Lac alpin emblématique avec son île et son église, dominé par un château médiéval. Décor de carte postale au pied des Alpes Juliennes.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 9/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- BOVEC -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=9" class="etape-card">
+                    <div class="etape-image">🚣</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🚣</span>
+                            <h3 class="etape-title">Bovec</h3>
+                        </div>
+                        <div class="etape-dates">17-18 août 2026</div>
+                        <p class="etape-description">
+                            Capitale slovène des sports d'aventure dans la vallée de la Soča, aux eaux émeraude. Point de départ pour le rafting et le canyoning.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 10/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- UDINE -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=10" class="etape-card">
+                    <div class="etape-image">🎨</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🎨</span>
+                            <h3 class="etape-title">Udine</h3>
+                        </div>
+                        <div class="etape-dates">19-20 août 2026</div>
+                        <p class="etape-description">
+                            Ville du Frioul au charme vénitien, avec son château, ses places élégantes et sa gastronomie réputée.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 11/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- BERGAME -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=11" class="etape-card">
+                    <div class="etape-image">🏔️</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">🏔️</span>
+                            <h3 class="etape-title">Bergame</h3>
+                        </div>
+                        <div class="etape-dates">21 août 2026</div>
+                        <p class="etape-description">
+                            Ville haute médiévale fortifiée (Città Alta) reliée à la ville basse moderne par funiculaire. Joyau de Lombardie.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 12/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- AOSTE -->
+                <a href="etape.html?voyage=RZIvnVB1xE2MmZcuKCaG&etape=12" class="etape-card">
+                    <div class="etape-image">⛰️</div>
+                    <div class="etape-content">
+                        <div class="etape-header">
+                            <span class="etape-emoji">⛰️</span>
+                            <h3 class="etape-title">Aoste</h3>
+                        </div>
+                        <div class="etape-dates">22 août 2026</div>
+                        <p class="etape-description">
+                            Capitale du Val d'Aoste, surnommée la Rome des Alpes pour ses vestiges romains. Porte du Mont-Blanc et du Grand-Paradis.
+                        </p>
+                        <div class="etape-footer">
+                            <span class="etape-number">Étape 13/13</span>
+                            <span class="etape-link">Découvrir →</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6uJDRmjZNXyUvwiW7lxUyXKFDU0pC-eA",
+            authDomain: "miara-voyages-2.firebaseapp.com",
+            projectId: "miara-voyages-2",
+            storageBucket: "miara-voyages-2.firebasestorage.app",
+            messagingSenderId: "375390867380",
+            appId: "1:375390867380:web:9a2b1887941ad062a16ce1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const burgerMenu = document.getElementById('burgerMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        burgerMenu.addEventListener('click', () => {
+            burgerMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+        });
+
+        menuOverlay.addEventListener('click', (e) => {
+            if (e.target === menuOverlay) {
+                burgerMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            }
+        });
+
+        // Wait for auth state before loading
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadEtapesWithPhotos();
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        async function loadEtapesWithPhotos() {
+            try {
+                const voyageDoc = await getDoc(doc(db, 'voyages', 'RZIvnVB1xE2MmZcuKCaG'));
+                if (!voyageDoc.exists()) return;
+
+                const voyage = voyageDoc.data();
+                const etapes = voyage.etapes || [];
+
+                const etapeCards = document.querySelectorAll('.etape-card');
+                etapeCards.forEach((card, index) => {
+                    if (etapes[index] && etapes[index].photoCouverture) {
+                        const imageDiv = card.querySelector('.etape-image');
+                        imageDiv.innerHTML = `<img src="${etapes[index].photoCouverture}" alt="${etapes[index].nom}">`;
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading etapes:', error);
+            }
+        }
+    </script>
+</body>
+</html>
