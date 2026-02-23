@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargement... | Miara Voyages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --noir: #1A1A1A;
+            --or-rose: #B76E79;
+            --gris-perle: #F8F8F8;
+            --blanc: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--noir);
+            color: var(--blanc);
+        }
+
+        .loading-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-size: 1.5rem;
+        }
+
+        /* BURGER MENU */
+        .burger-menu {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--blanc);
+            transition: all 0.3s;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--noir);
+            z-index: 999;
+            transition: right 0.3s ease;
+            padding: 6rem 3rem 3rem;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+        }
+
+        .menu-overlay.active {
+            right: 0;
+        }
+
+        .menu-overlay nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .menu-overlay a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            transition: all 0.3s;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* HEADER */
+        .back-link {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            color: var(--blanc);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            border-color: var(--or-rose);
+            color: var(--or-rose);
+        }
+
+        /* HERO */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--noir) 0%, #2A2A2A 100%);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--or-rose);
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            background: var(--gris-perle);
+            padding: 4rem 2rem 6rem;
+            min-height: 60vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--noir);
+        }
+
+        /* ETAPES GRID */
+        .etapes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .etape-card {
+            background: var(--blanc);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .etape-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .etape-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--noir) 0%, var(--or-rose) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .etape-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .etape-content {
+            padding: 2rem;
+        }
+
+        .etape-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .etape-emoji {
+            font-size: 2.5rem;
+        }
+
+        .etape-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--noir);
+        }
+
+        .etape-dates {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .etape-description {
+            color: #666;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .etape-footer {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .etape-number {
+            font-size: 0.85rem;
+            color: var(--or-rose);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .etape-link {
+            color: var(--or-rose);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #c33;
+        }
+
+        @media (max-width: 768px) {
+            .etapes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingScreen" class="loading-screen">
+        Chargement du voyage...
+    </div>
+
+    <div id="content" style="display: none;">
+        <!-- Back Link -->
+        <a href="index.html" class="back-link">← Accueil</a>
+
+        <!-- Burger Menu -->
+        <div class="burger-menu" id="burgerMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="menu-overlay" id="menuOverlay">
+            <nav>
+                <a href="index.html">Accueil</a>
+                <a href="#voyages">Voyages</a>
+                <a href="#about">À propos</a>
+                <a href="login.html">🔐 Connexion</a>
+            </nav>
+        </div>
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1 id="voyageTitle">Chargement...</h1>
+            <div class="hero-meta">
+                <span id="voyagePays"></span>
+                <span id="voyageDates"></span>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number" id="statDuree">-</div>
+                    <div class="stat-label">Jours</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="statEtapes">-</div>
+                    <div class="stat-label">Étapes</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="statDistance">-</div>
+                    <div class="stat-label">Km</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <h2 class="section-title">Nos Étapes</h2>
+                <div class="etapes-grid" id="etapesGrid"></div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6uJDRmjZNXyUvwiW7lxUyXKFDU0pC-eA",
+            authDomain: "miara-voyages-2.firebaseapp.com",
+            projectId: "miara-voyages-2",
+            storageBucket: "miara-voyages-2.firebasestorage.app",
+            messagingSenderId: "375390867380",
+            appId: "1:375390867380:web:9a2b1887941ad062a16ce1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const voyageId = urlParams.get('id');
+
+        if (!voyageId) {
+            document.getElementById('loadingScreen').innerHTML = '<div class="error-message"><h2>Erreur</h2><p>ID de voyage manquant</p><p><a href="index.html" style="color: var(--or-rose);">Retour à l\'accueil</a></p></div>';
+        } else {
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                loadVoyage(voyageId);
+            });
+        }
+
+        async function loadVoyage(id) {
+            try {
+                const voyageDoc = await getDoc(doc(db, 'voyages', id));
+                
+                if (!voyageDoc.exists()) {
+                    throw new Error('Voyage non trouvé');
+                }
+
+                const voyage = voyageDoc.data();
+                
+                document.title = `${voyage.titre} | Miara Voyages`;
+                document.getElementById('voyageTitle').textContent = voyage.titre;
+                document.getElementById('voyagePays').textContent = voyage.pays || '';
+                document.getElementById('voyageDates').textContent = formatDateRange(voyage.dateDebut, voyage.dateFin);
+                document.getElementById('statDuree').textContent = voyage.duree || 0;
+                document.getElementById('statEtapes').textContent = voyage.etapes?.length || 0;
+                document.getElementById('statDistance').textContent = voyage.distance || 0;
+                
+                displayEtapes(voyage.etapes || [], id);
+                
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading voyage:', error);
+                document.getElementById('loadingScreen').innerHTML = `
+                    <div class="error-message">
+                        <h2>Erreur</h2>
+                        <p>${error.message}</p>
+                        <p><a href="index.html" style="color: var(--or-rose);">Retour à l'accueil</a></p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayEtapes(etapes, voyageId) {
+            const grid = document.getElementById('etapesGrid');
+            
+            if (etapes.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">Aucune étape pour ce voyage</p>';
+                return;
+            }
+            
+            grid.innerHTML = etapes.map((etape, index) => {
+                const imageContent = etape.photoCouverture 
+                    ? `<img src="${etape.photoCouverture}" alt="${etape.nom}">`
+                    : etape.emoji || '📍';
+                
+                return `
+                    <a href="etape.html?voyage=${voyageId}&etape=${index}" class="etape-card">
+                        <div class="etape-image">${imageContent}</div>
+                        <div class="etape-content">
+                            <div class="etape-header">
+                                <span class="etape-emoji">${etape.emoji || '📍'}</span>
+                                <h3 class="etape-title">${etape.nom}</h3>
+                            </div>
+                            <div class="etape-dates">${formatDateRange(etape.dateDebut, etape.dateFin)}</div>
+                            <p class="etape-description">
+                                ${etape.description || 'Description à venir...'}
+                            </p>
+                            <div class="etape-footer">
+                                <span class="etape-number">Étape ${index + 1}/${etapes.length}</span>
+                                <span class="etape-link">Découvrir →</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        function formatDateRange(start, end) {
+            if (!start && !end) return '';
+            if (!end) return start;
+            return `${start} - ${end}`;
+        }
+
+        const burgerMenu = document.getElementById('burgerMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        burgerMenu.addEventListener('click', () => {
+            burgerMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+        });
+
+        menuOverlay.addEventListener('click', (e) => {
+            if (e.target === menuOverlay) {
+                burgerMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
